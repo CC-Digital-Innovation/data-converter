@@ -19,6 +19,7 @@ spec:
             export API_KEY="{{ .Data.data.api_key }}"
           {{- end }}
         vault.hashicorp.com/agent-pre-populate-only: "true"
+        vault.hashicorp.com/ca-cert: /run/secrets/kubernetes.io/serviceaccount/ca.crt
       labels:
         app: DataConverter
     spec:
