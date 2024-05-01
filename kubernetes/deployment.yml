@@ -27,7 +27,7 @@ spec:
         app: DataConverter
     spec:
       containers:
-        - image: registry.quokka.ninja/ccfs/DataConverter:0.0.0
+        - image: harbor.k3s.quokka.ninja/library/DataConverter
           name: DataConverter
           args: ['/bin/bash', '-c', 'source /vaults/secret/dataConverter && uvicorn dataConversion:app --host 0.0.0.0 --port 8000 --root-path /api']
           ports:
@@ -39,6 +39,4 @@ spec:
             requests:
               cpu: 100m
               memory: 128Mi
-      imagePullSecrets:
-        - name: gitlab-cr
       serviceAccountName: DataConverter
