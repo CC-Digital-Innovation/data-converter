@@ -26,7 +26,7 @@ spec:
       containers:
         - image: registry.quokka.ninja/ccfs/dataconverter:0.0.1
           name: dataconverter
-          args: ['/bin/bash', '-c', 'source /vault/secret/dataConverter && uvicorn dataConversion:app --host 0.0.0.0 --port 8000 --root-path /api']
+          args: ['/bin/bash', '-c', 'source /vault/secret/DataConverter && uvicorn dataConversion:app --host 0.0.0.0 --port 8000 --root-path /api']
           ports:
             - containerPort: 8000
           resources:
