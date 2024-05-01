@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: DataConverter
+  annotations:
+    traefik.ingress.kubernetes.io/redirect-entry-point: https
+    traefik.ingress.kubernetes.io/redirect-permanent: "true"
+    traefik.ingress.kubernetes.io/rewrite-target: /
+    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+    traefik.ingress.kubernetes.io/router.middlewares: default-redirect-https@kubernetescrd,default-strip-dataconverter@kubernetescrd
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: k3s.quokka.ninja
+    http:
+      paths:
+      - path: /dataconverter
+        pathType: Prefix
+        backend:
+          service:
+            name: DataConverter
+            port:
+              number: 80

@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: DataConverter
+spec:
+  selector:
+    app: DataConverter
+  ports:
+    - port: 8000

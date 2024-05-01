@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: DataConverter
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: DataConverter
+  template:
+    metadata:
+      annotations:
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/role: 'DataConverter'
+        vault.hashicorp.com/agent-inject-secret-bmp: 'vaults/secret/DataConverter'
+        vault.hashicorp.com/agent-inject-template-bmp: |
+          {{- with secret "vaults/secret/DataConverter" -}}
+            export API_KEY="{{ .Data.data.api_key }}
+            export DEFAULT_FORWARDING_URL="{{ .Data.data.fwd_url }}
+            export DEFAULT_AUTH_TYPE="{{ .Data.data.auth_type }}
+            export DEFAULT_HEADER_KEY="{{ .Data.data.fwd_api_header_key }}
+            export DEFAULT_AUTH="{{ .Data.data.fwd_api_token }}""
+          {{- end }}
+        vault.hashicorp.com/agent-pre-populate-only: "true"
+      labels:
+        app: DataConverter
+    spec:
+      containers:
+        - image: registry.quokka.ninja/ccfs/DataConverter:0.0.0
+          name: DataConverter
+          args: ['/bin/bash', '-c', 'source /vaults/secret/dataConverter && uvicorn dataConversion:app --host 0.0.0.0 --port 8000 --root-path /api']
+          ports:
+            - containerPort: 8000
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1024Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+      imagePullSecrets:
+        - name: gitlab-cr
+      serviceAccountName: DataConverter
