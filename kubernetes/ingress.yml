@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: DataConverter
+  name: dataconverter
   annotations:
     traefik.ingress.kubernetes.io/redirect-entry-point: https
     traefik.ingress.kubernetes.io/redirect-permanent: "true"
