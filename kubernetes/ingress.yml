@@ -4,7 +4,7 @@ metadata:
   name: dataconverter
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
-    traefik.ingress.kubernetes.io/router.middlewares: default-redirect-https@kubernetescrd,default-strip-dataconverter@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: default-redirect-https@kubernetescrd,default-dataconverter-stripprefix@kubernetescrd
 spec:
   ingressClassName: traefik
   rules:
