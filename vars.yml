@@ -2,6 +2,6 @@ repo: https://github.com/CC-Digital-Innovation/data-converter
 ssh_url: git@github.com:CC-Digital-Innovation/data-converter.git
 branch: main
 project_root: src
-image: DataConverter
+image: dataconverter
 manifest_path: kubernetes/deployment.yml
 pipeline: dataconverter

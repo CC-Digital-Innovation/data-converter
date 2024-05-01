@@ -13,23 +13,19 @@ spec:
       annotations:
         vault.hashicorp.com/agent-inject: 'true'
         vault.hashicorp.com/role: 'DataConverter'
-        vault.hashicorp.com/agent-inject-secret-bmp: 'vaults/secret/DataConverter'
+        vault.hashicorp.com/agent-inject-secret-bmp: 'secret/DataConverter'
         vault.hashicorp.com/agent-inject-template-bmp: |
-          {{- with secret "vaults/secret/DataConverter" -}}
-            export API_KEY="{{ .Data.data.api_key }}
-            export DEFAULT_FORWARDING_URL="{{ .Data.data.fwd_url }}
-            export DEFAULT_AUTH_TYPE="{{ .Data.data.auth_type }}
-            export DEFAULT_HEADER_KEY="{{ .Data.data.fwd_api_header_key }}
-            export DEFAULT_AUTH="{{ .Data.data.fwd_api_token }}""
+          {{- with secret "secret/DataConverter" -}}
+            export API_KEY="{{ .Data.data.api_key }}"
           {{- end }}
         vault.hashicorp.com/agent-pre-populate-only: "true"
       labels:
         app: DataConverter
     spec:
       containers:
-        - image: harbor.k3s.quokka.ninja/library/DataConverter
+        - image: harbor.k3s.quokka.ninja/library/dataconverter
           name: DataConverter
-          args: ['/bin/bash', '-c', 'source /vaults/secret/dataConverter && uvicorn dataConversion:app --host 0.0.0.0 --port 8000 --root-path /api']
+          args: ['/bin/bash', '-c', 'source /vault/secret/dataConverter && uvicorn dataConversion:app --host 0.0.0.0 --port 8000 --root-path /api']
           ports:
             - containerPort: 8000
           resources:
