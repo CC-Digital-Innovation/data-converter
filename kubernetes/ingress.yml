@@ -17,4 +17,5 @@ spec:
           service:
             name: dataconverter
             port:
-              number: 80
+              number: 8000
+
