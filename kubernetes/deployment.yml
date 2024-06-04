@@ -12,8 +12,10 @@ spec:
     metadata:
       annotations:
         vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/agent-auto-auth-exit-on-err: 'true'
         vault.hashicorp.com/role: 'DataConverter'
         vault.hashicorp.com/agent-inject-secret-dataconverter: 'secret/DataConverter'
+        vault.hashicorp.com/error-on-missing-key-dataconverter: 'true'
         vault.hashicorp.com/agent-inject-template-dataconverter: |
           {{- with secret "secret/DataConverter" -}}
             export API_KEY="{{ .Data.data.API_KEY }}"
