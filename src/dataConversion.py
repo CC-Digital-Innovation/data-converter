@@ -1,4 +1,5 @@
-from fastapi import Depends, FastAPI, HTTPException, UploadFile, status
+import urllib.parse
+from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import APIKeyHeader
 from fastapi.params import Body, Form
 from pathlib import PurePath
@@ -9,12 +10,14 @@ import dotenv
 import os
 import requests
 import xml.sax
+import urllib
 
 #load secrets from environemnt variables defined in deployement
 dotenv.load_dotenv(PurePath(__file__).with_name('.env'))
 
 #assign environment variables to globals
 API_KEY = os.getenv('API_KEY')
+URLDECODE_DEFAULT_FWD_URL = os.getenv('WEBHOOK')
 DEFAULT_FORWARDING_URL = "DEFAULT_FORWARDING_URL"
 DEFAULT_AUTH_TYPE = "DEFAULT_AUTH_TYPE"
 DEFAULT_HEADER_KEY= "DEFAULT_HEADER_KEY"
@@ -88,3 +91,19 @@ def xml_to_json(xmlData: str = Form(None),
             return xmlDict
     else:
         return {'Error': 'Please provide valid xml data'}
+
+
+@app.post('/prtg_urldecode', response_model=None)
+def prtg_urldecode(body: str=Body(...)):
+    url_decode_body = urllib.parse.unquote(body)
+    split_key = url_decode_body.split('&')
+    if not secrets.compare_digest(split_key[1], API_KEY):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail='Invalid token')
+    else:
+        first_replace = split_key[0].replace('"', "'")
+        sec_replace = first_replace.replace("''''", '"')
+        header = {'Content-Type' : 'application/json'}
+        requests.post(URLDECODE_DEFAULT_FWD_URL, sec_replace, headers=header)
+        return json.loads(sec_replace)
