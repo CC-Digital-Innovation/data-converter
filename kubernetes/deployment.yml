@@ -17,6 +17,7 @@ spec:
         vault.hashicorp.com/agent-inject-template-dataconverter: |
           {{- with secret "secret/DataConverter" -}}
             export API_KEY="{{ .Data.data.API_KEY }}"
+            export WEBHOOK="{{ .Data.data.WEBHOOK }}"
           {{- end }}
         vault.hashicorp.com/agent-pre-populate-only: "true"
         vault.hashicorp.com/ca-cert: /run/secrets/kubernetes.io/serviceaccount/ca.crt
