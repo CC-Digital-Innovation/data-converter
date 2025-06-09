@@ -125,7 +125,7 @@ def xml_to_json(xmlData: str = Form(None),
         return {'Error': 'Please provide valid xml data'}
 
 
-@app.post('/prtg_urldecode', status_code=status.HTTP_200_OK)
+@app.post('/prtg_urldecode')
 def prtg_urldecode(data: Alert = Form()):
     if not secrets.compare_digest(data.api_key, API_KEY):
         raise HTTPException(
