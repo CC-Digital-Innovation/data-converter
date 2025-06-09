@@ -31,36 +31,36 @@ app = FastAPI()
 api_key = APIKeyHeader(name='API-Key')
 
 class Alert(BaseModel):
-    device: str 
-    linkdevice: str 
-    sitename: str 
-    serviceurl: str 
-    settings: str 
-    host: str 
-    down: str 
-    downtime: str 
-    lastdown: str 
-    nodename: str 
-    location: str 
-    group: str 
-    linkgroup: str 
-    lastmessage: str 
-    lastup: str 
-    uptime: str 
-    status: str 
-    statesince: str 
-    sensor: str 
-    linksensor: str 
-    probe: str 
-    priority: str 
-    commentssensor: str 
-    commentsdevice: str 
-    commentsgroup: str 
-    commentsprobe: str 
-    colorofstate: str 
-    iconofstate: str 
-    id: str
-    api_key: str
+    device: str = None
+    linkdevice: str = None
+    sitename: str = None
+    serviceurl: str = None
+    settings: str = None
+    host: str = None
+    down: str = None
+    downtime: str = None
+    lastdown: str = None
+    nodename: str = None
+    location: str = None
+    group: str = None
+    linkgroup: str = None
+    lastmessage: str = None
+    lastup: str = None
+    uptime: str = None
+    status: str = None
+    statesince: str = None
+    sensor: str = None
+    linksensor: str = None
+    probe: str = None
+    priority: str = None
+    commentssensor: str = None
+    commentsdevice: str = None
+    commentsgroup: str = None
+    commentsprobe: str = None
+    colorofstate: str = None
+    iconofstate: str = None
+    id: str = None
+    api_key: str = None
 
 #auth key
 def authorize(key: str = Depends(api_key)):
