@@ -11,6 +11,7 @@ import os
 import requests
 import xml.sax
 import urllib
+from loguru import logger
 
 #load secrets from environemnt variables defined in deployement
 dotenv.load_dotenv(PurePath(__file__).with_name('.env'))
@@ -128,9 +129,11 @@ def xml_to_json(xmlData: str = Form(None),
 @app.post('/prtg_urldecode')
 def prtg_urldecode(data: Alert = Form()):
     if not secrets.compare_digest(data.api_key, API_KEY):
+        logger.info(f"Application not authorized")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail='Invalid token')
     else:
         header = {'Content-Type' : 'application/json'}
-        requests.post(URLDECODE_DEFAULT_FWD_URL, data.model_dump(), headers=header)
+        r = requests.post(URLDECODE_DEFAULT_FWD_URL, data.model_dump(), headers=header)
+        logger.info(f"Automate response: {r.content}")
