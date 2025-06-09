@@ -1,7 +1,6 @@
 import urllib.parse
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import Depends, FastAPI, HTTPException, status, Form
 from fastapi.security import APIKeyHeader
-from fastapi.params import Body, Form
 from pathlib import PurePath
 from pydantic import BaseModel
 import xmltodict
@@ -126,7 +125,7 @@ def xml_to_json(xmlData: str = Form(None),
         return {'Error': 'Please provide valid xml data'}
 
 
-@app.post('/prtg_urldecode', response_model=None, status_code=status.HTTP_200_OK)
+@app.post('/prtg_urldecode', status_code=status.HTTP_200_OK)
 def prtg_urldecode(data: Alert = Form()):
     if not secrets.compare_digest(data.api_key, API_KEY):
         raise HTTPException(
