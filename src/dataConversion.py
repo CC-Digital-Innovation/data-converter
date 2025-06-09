@@ -93,7 +93,7 @@ def xml_to_json(xmlData: str = Form(None),
         return {'Error': 'Please provide valid xml data'}
 
 
-@app.post('/prtg_urldecode', response_model=None)
+@app.post('/prtg_urldecode', response_model=None, status_code=status.HTTP_200_OK)
 def prtg_urldecode(body: str=Body(...)):
     url_decode_body = urllib.parse.unquote(body)
     split_key = url_decode_body.split('&')
@@ -106,4 +106,3 @@ def prtg_urldecode(body: str=Body(...)):
         sec_replace = first_replace.replace("''''", '"')
         header = {'Content-Type' : 'application/json'}
         requests.post(URLDECODE_DEFAULT_FWD_URL, sec_replace, headers=header)
-        return json.loads(sec_replace)
