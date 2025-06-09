@@ -3,6 +3,7 @@ from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import APIKeyHeader
 from fastapi.params import Body, Form
 from pathlib import PurePath
+from pydantic import BaseModel
 import xmltodict
 import json
 import secrets
@@ -29,6 +30,38 @@ app = FastAPI()
 
 #init key for auth
 api_key = APIKeyHeader(name='API-Key')
+
+class Alert(BaseModel):
+    device: str 
+    linkdevice: str 
+    sitename: str 
+    serviceurl: str 
+    settings: str 
+    host: str 
+    down: str 
+    downtime: str 
+    lastdown: str 
+    nodename: str 
+    location: str 
+    group: str 
+    linkgroup: str 
+    lastmessage: str 
+    lastup: str 
+    uptime: str 
+    status: str 
+    statesince: str 
+    sensor: str 
+    linksensor: str 
+    probe: str 
+    priority: str 
+    commentssensor: str 
+    commentsdevice: str 
+    commentsgroup: str 
+    commentsprobe: str 
+    colorofstate: str 
+    iconofstate: str 
+    id: str
+    api_key: str
 
 #auth key
 def authorize(key: str = Depends(api_key)):
@@ -94,15 +127,11 @@ def xml_to_json(xmlData: str = Form(None),
 
 
 @app.post('/prtg_urldecode', response_model=None, status_code=status.HTTP_200_OK)
-def prtg_urldecode(body: str=Body(...)):
-    url_decode_body = urllib.parse.unquote(body)
-    split_key = url_decode_body.split('&')
-    if not secrets.compare_digest(split_key[1], API_KEY):
+def prtg_urldecode(data: Alert = Form()):
+    if not secrets.compare_digest(data.api_key, API_KEY):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail='Invalid token')
     else:
-        first_replace = split_key[0].replace('"', "'")
-        sec_replace = first_replace.replace("''''", '"')
         header = {'Content-Type' : 'application/json'}
-        requests.post(URLDECODE_DEFAULT_FWD_URL, sec_replace, headers=header)
+        requests.post(URLDECODE_DEFAULT_FWD_URL, data.model_dump(), headers=header)
