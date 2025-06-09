@@ -25,7 +25,7 @@ spec:
         app: DataConverter
     spec:
       containers:
-        - image: harbor.k3s.quokka.ninja/library/dataconverter:0.0.6
+        - image: harbor.k3s.quokka.ninja/library/dataconverter:0.0.7
           name: dataconverter
           args: ['/bin/bash', '-c', 'source /vault/secrets/dataconverter && uvicorn dataConversion:app --host 0.0.0.0 --port 8000 --root-path /dataconverter']
           ports:
