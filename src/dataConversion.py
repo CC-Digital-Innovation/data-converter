@@ -134,5 +134,6 @@ def prtg_urldecode(data: Alert = Form()):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail='Invalid token')
     else:
-        r = requests.post(URLDECODE_DEFAULT_FWD_URL, json=data.model_dump())
+        header = {'Content-Type' : 'application/json'}
+        r = requests.post(URLDECODE_DEFAULT_FWD_URL, data.model_dump_json(), headers=header)
         logger.info(f"Automate response: {r.content}")
